@@ -28,6 +28,8 @@ It's an anti-harassment measure. This way, if you want to make an ebooks bot of 
 
 Just copy `ebooks.py` and `requirements.txt` into that bot's directory, and modify that `config.cfg` to have an `[EBOOKS]` section as described in step 6 above. ananas bots play very nicely with each other.
 
+If you've already scraped some accounts and want to keep that data, copy over `accts.json`, `model.json`, and the `corpus` directory too. All that data will stay intact the next time you launch ananas.
+
 ## What if I want my bot to toot at a different time?
 
 I'd love to be able to include this in the `config.cfg` file, but for various technical reasons it's not possible right now. Instead, you'll have to actually open up `ebooks.py`.
