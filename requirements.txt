@@ -1,3 +1,4 @@
 markovify==0.7.1
 Mastodon.py==1.2.2
 beautifulsoup4==4.6.0
+ananas>=1.0.0
