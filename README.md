@@ -20,6 +20,10 @@ Usage:
 
 If you want to re-scrape toots from your followed accounts, just stop the bot (with Ctrl-C) and start it again; it will check for new toots every time it starts up.
 
+## Why do I have to follow everyone I want to scrape? Can't I just give it a list of usernames?
+
+It's an anti-harassment measure. This way, if you want to make an ebooks bot of someone's toots, they're notified that the bot exists.
+
 ## What if I already have an ananas bot running and I'd like to run them in tandem?
 
 Just copy `ebooks.py` and `requirements.txt` into that bot's directory, and modify that `config.cfg` to have an `[EBOOKS]` section as described in step 6 above. ananas bots play very nicely with each other.
