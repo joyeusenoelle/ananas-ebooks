@@ -38,6 +38,7 @@ class ebooksBot(PineappleBot):
     return soup.get_text(chr(31)).strip()
 
   # scrapes the accounts the bot is following to build corpus
+  @daily(hour=2, minute=15)
   def scrape(self):
     me = self.mastodon.account_verify_credentials()
     following = self.mastodon.account_following(me['id'])

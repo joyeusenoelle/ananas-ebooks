@@ -30,6 +30,10 @@ Just copy `ebooks.py` and `requirements.txt` into that bot's directory, and modi
 
 If you've already scraped some accounts and want to keep that data, copy over `accts.json`, `model.json`, and the `corpus` directory too. All that data will stay intact the next time you launch ananas.
 
+## This has been running for a long time, and I've tooted a lot since then. How do I get my new toots into the corpus?
+
+The bot automatically scrapes new toots from its followed accounts once a day at 2:15 AM (to minimize collision with other tasks).
+
 ## What if I want my bot to toot at a different time?
 
 I'd love to be able to include this in the `config.cfg` file, but for various technical reasons it's not possible right now. Instead, you'll have to actually open up `ebooks.py`.
