@@ -7,7 +7,7 @@ import json
 import os
 import sys
 import getopt
-from ananas import PineappleBot, hourly, schedule, reply, html_strip_tags
+from ananas import PineappleBot, hourly, schedule, reply, html_strip_tags, daily
 
 class ebooksBot(PineappleBot):
   exclude_replies = True
@@ -94,7 +94,7 @@ class ebooksBot(PineappleBot):
         sys.stdout.flush()
         filtered_toots = list(filter(lambda x: x['spoiler_text'] == "" and x['reblog'] is None and x['visibility'] in ["public", "unlisted"], toots))
         for toot in filtered_toots:
-          output.write(html_strip_tags(toot['content'])+'\n')
+          output.write(html_strip_tags(toot['content'])+'\n', True, chr(31))
         toots = self.mastodon.fetch_next(toots)
       # buffer is appended to the top of old corpus
       if os.path.exists(corpusfile):
@@ -123,6 +123,7 @@ class ebooksBot(PineappleBot):
 
   # perform a generated toot to mastodon
   @hourly(minute=0)
+  @hourly(minute=30)
   def toot(self):
     msg = self.generate(500)
     self.mastodon.toot(msg)
@@ -131,12 +132,12 @@ class ebooksBot(PineappleBot):
   # scan all notifications for mentions and reply to them
   @reply
   def post_reply(self, mention, user):
-    msg = html_strip_tags(mention["content"])
+    msg = html_strip_tags(mention["content"], True, chr(31))
     rsp = self.generate(400)
     tgt = user["acct"]
     irt = mention["id"]
     vis = mention["visibility"]
-    print("Received toot from {}: {}".format(tgt, msg))
+    print("Received toot from {}: {}".format(tgt, msg.replace(chr(31), "\n")))
     print("Responding with {} visibility: {}".format(vis, rsp))
     final_rsp = "@{} {}".format(tgt, rsp)
     final_rsp = final_rsp[:500]
