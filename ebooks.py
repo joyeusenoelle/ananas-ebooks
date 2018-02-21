@@ -7,7 +7,7 @@ import json
 import os
 import sys
 import getopt
-from ananas import PineappleBot, hourly, schedule, reply, html_strip_tags
+from ananas import PineappleBot, hourly, schedule, reply, html_strip_tags, daily
 
 class ebooksBot(PineappleBot):
   exclude_replies = True
