@@ -94,7 +94,7 @@ class ebooksBot(PineappleBot):
         sys.stdout.flush()
         filtered_toots = list(filter(lambda x: x['spoiler_text'] == "" and x['reblog'] is None and x['visibility'] in ["public", "unlisted"], toots))
         for toot in filtered_toots:
-          output.write(html_strip_tags(toot['content'])+'\n', True, chr(31))
+          output.write(html_strip_tags(toot['content'], True, chr(31))+'\n')
         toots = self.mastodon.fetch_next(toots)
       # buffer is appended to the top of old corpus
       if os.path.exists(corpusfile):
