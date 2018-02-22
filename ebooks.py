@@ -1,6 +1,5 @@
 #!/usr/bin/python3
 from mastodon import Mastodon
-from bs4 import BeautifulSoup
 import markovify
 import html
 import json
@@ -21,24 +20,6 @@ class ebooksBot(PineappleBot):
     else:
       self.reply_to_mentions = True
     self.scrape()
-
-  # strip html tags for text alone
-  def strip_tags(self, content):
-    soup = BeautifulSoup(html.unescape(content), 'html.parser')
-    # remove mentions
-    tags = soup.select('.mention')
-    for i in tags:
-      i.extract()
-    # clear shortened link captions
-    tags = soup.select('.invisible, .ellipsis')
-    for i in tags:
-      i.unwrap()
-    # replace link text to avoid caption breaking
-    tags = soup.select('a')
-    for i in tags:
-      i.replace_with(i.get_text())
-    # strip html tags, chr(31) joins text in different html tags
-    return soup.get_text(chr(31)).strip()
 
   # scrapes the accounts the bot is following to build corpus
   @daily(hour=2, minute=15)
