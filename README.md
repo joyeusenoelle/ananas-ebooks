@@ -67,3 +67,7 @@ If you want your bot to post **less** than once an hour, change `@hourly` to `@d
 Note how that uses 24-hour time.
 
 You can see more details at the [ananas repo](https://github.com/chr-1x/ananas).
+
+## I don't want my bot to reply to people, I just want it to post.
+
+In `config.cfg`, change `reply_to_mentions` to `False`.
