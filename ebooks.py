@@ -71,7 +71,7 @@ class ebooksBot(PineappleBot):
     corpusfile = 'corpus/%s.txt' % id
     i = 0
     with open(bufferfile, 'w') as output:
-      while toots != None:
+      while toots != None and len(toots) > 0:
         # writes current amount of scraped toots without breaking line
         i = i + len(toots)
         sys.stdout.write('\r%d' % i)
