@@ -10,13 +10,16 @@ import getopt
 from ananas import PineappleBot, hourly, schedule, reply, html_strip_tags, daily
 
 class ebooksBot(PineappleBot):
-  exclude_replies = True
 
   def start(self):
     try:
       self.exclude_replies = bool(self.config.exclude_replies)
     except:
       self.exclude_replies = True
+    try:
+      self.reply_to_mentions = bool(self.config.reply_to_mentions)
+    else:
+      self.reply_to_mentions = True
     self.scrape()
 
   # strip html tags for text alone
@@ -132,15 +135,18 @@ class ebooksBot(PineappleBot):
   # scan all notifications for mentions and reply to them
   @reply
   def post_reply(self, mention, user):
-    msg = html_strip_tags(mention["content"], True, chr(31))
-    rsp = self.generate(400)
-    tgt = user["acct"]
-    irt = mention["id"]
-    vis = mention["visibility"]
-    print("Received toot from {}: {}".format(tgt, msg.replace(chr(31), "\n")))
-    print("Responding with {} visibility: {}".format(vis, rsp))
-    final_rsp = "@{} {}".format(tgt, rsp)
-    final_rsp = final_rsp[:500]
-    self.mastodon.status_post(final_rsp,
-                  in_reply_to_id = irt,
-                  visibility = vis)
+    if self.reply_to_mentions == True:
+      msg = html_strip_tags(mention["content"], True, chr(31))
+      rsp = self.generate(400)
+      tgt = user["acct"]
+      irt = mention["id"]
+      vis = mention["visibility"]
+      print("Received toot from {}: {}".format(tgt, msg.replace(chr(31), "\n")))
+      print("Responding with {} visibility: {}".format(vis, rsp))
+      final_rsp = "@{} {}".format(tgt, rsp)
+      final_rsp = final_rsp[:500]
+      self.mastodon.status_post(final_rsp,
+                    in_reply_to_id = irt,
+                    visibility = vis)
+    else:
+      pass

@@ -1,6 +1,6 @@
 # ananas-ebooks
 
-Based on [Maple](https://computerfairi.es/@squirrel)'s [mastodon-ebooks.py]().
+Based on [Maple](https://computerfairi.es/@squirrel)'s [mastodon-ebooks.py](https://github.com/Lana-chan/mastodon-ebooks.py).
 
 This simply takes Maple's work and adapts it for the ananas framework, allowing you to skip the cron jobs and manual posting.
 
