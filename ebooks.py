@@ -21,9 +21,9 @@ class ebooksBot(PineappleBot):
     except:
       self.reply_to_mentions = True
     try:
-      self.excluded_words = str(self.config.excluded_words)
+      self.visibility = str(self.config.visibility)
     except:
-      self.excluded_words = ""
+      self.visibility = 'unlisted'
     self.scrape()
 
   # scrapes the accounts the bot is following to build corpus
@@ -120,7 +120,8 @@ class ebooksBot(PineappleBot):
   @hourly(minute=30)
   def toot(self):
     msg = self.generate(500)
-    self.mastodon.toot(msg)
+    self.mastodon.status_post(msg,
+                              visibility = self.visibility)
     print('Tooted: %s' % msg)
 
   # scan all notifications for mentions and reply to them

@@ -20,6 +20,18 @@ Usage:
 
 If you want to re-scrape toots from your followed accounts, just stop the bot (with Ctrl-C) and start it again; it will check for new toots every time it starts up.
 
+## What settings can I change in config.cfg?
+
+* `exclude_replies`: if this is True, when your bot is scraping the accounts it follows, it will ignore all toots that are replies to someone else. (This *does not* affect toots where the target user is *starting* a conversation - just where they're replying to someone.) **Default: True.**
+* `reply_to_mentions`: if this is True, your bot will reply with an auto-generated toot when someone mentions it. **Default: True.**
+* `visibility`: This affects the default visibility setting for your bot. **Default: unlisted.** The options are:
+  * `public`: Your bot's toots will show up to everyone and will be posted on the public timelines. 
+  * `unlisted`: Your bot's toots will show up to everyone but will *not* be posted on the public timelines.
+  * `private`: Your bot's toots will only be visible to people who follow your bot.
+  * `direct`: Your bot's toots will only be visible to your bot. (This is not recommended!)
+
+If the setting you give for `visibility` isn't one of those four options, it will default to `unlisted`.
+
 ## Why do I have to follow everyone I want to scrape? Can't I just give it a list of usernames?
 
 It's an anti-harassment measure. This way, if you want to make an ebooks bot of someone's toots, they're notified that the bot exists.
