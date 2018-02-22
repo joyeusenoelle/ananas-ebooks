@@ -1,12 +1,13 @@
 #!/usr/bin/python3
-from mastodon import Mastodon
-import markovify
 import html
 import json
 import os
 import sys
 import getopt
+import re
+import markovify
 from ananas import PineappleBot, hourly, schedule, reply, html_strip_tags, daily
+from mastodon import Mastodon
 
 class ebooksBot(PineappleBot):
 
@@ -17,8 +18,12 @@ class ebooksBot(PineappleBot):
       self.exclude_replies = True
     try:
       self.reply_to_mentions = bool(self.config.reply_to_mentions)
-    else:
+    except:
       self.reply_to_mentions = True
+    try:
+      self.excluded_words = str(self.config.excluded_words)
+    except:
+      self.excluded_words = ""
     self.scrape()
 
   # scrapes the accounts the bot is following to build corpus
@@ -99,10 +104,15 @@ class ebooksBot(PineappleBot):
       sys.exit('no model -- please scrape first')
     with open(modelfile, 'r') as f:
       reconstituted_model = markovify.Text.from_json(f.read())
+#    okay_to_return = False
+#    excluded_pattern = re.compile(r'{}'.format("|".join(self.excluded_words.split(","))))
+#    while not okay_to_return:
     if length:
       msg = reconstituted_model.make_short_sentence(length)
     else:
       msg = reconstituted_model.make_sentence()
+      #if not excluded_pattern.findall(msg):
+        #okay_to_return = True
     return msg.replace(chr(31), "\n")
 
   # perform a generated toot to mastodon
@@ -118,7 +128,7 @@ class ebooksBot(PineappleBot):
   def post_reply(self, mention, user):
     if self.reply_to_mentions == True:
       msg = html_strip_tags(mention["content"], True, chr(31))
-      rsp = self.generate(400)
+      rsp = self.generate(300)
       tgt = user["acct"]
       irt = mention["id"]
       vis = mention["visibility"]
