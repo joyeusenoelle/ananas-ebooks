@@ -22,8 +22,16 @@ class ebooksBot(PineappleBot):
       self.reply_to_mentions = True
     try:
       self.visibility = str(self.config.visibility)
+      if self.visibility not in ['public', 'unlisted', 'private', 'direct']:
+        self.visibility = 'unlisted'
     except:
       self.visibility = 'unlisted'
+    try:
+      self.bot_name = str(self.config.bot_name)
+      self.model_name = "{}-model.json".format(self.bot_name)
+    except:
+      self.bot_name = ""
+      self.model_name = "model.json"
     self.scrape()
 
   # scrapes the accounts the bot is following to build corpus
@@ -61,7 +69,7 @@ class ebooksBot(PineappleBot):
             combined_model = markovify.combine(models=[combined_model, model])
           else:
             combined_model = model
-    with open('model.json','w') as f:
+    with open(self.model_name,'w') as f:
       f.write(combined_model.to_json())
 
   def scrape_id(self, id, since=None):
@@ -99,7 +107,7 @@ class ebooksBot(PineappleBot):
 
   # returns a markov generated toot
   def generate(self, length=None):
-    modelfile = 'model.json'
+    modelfile = self.model_name
     if not os.path.exists(modelfile):
       sys.exit('no model -- please scrape first')
     with open(modelfile, 'r') as f:
