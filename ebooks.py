@@ -29,9 +29,11 @@ class ebooksBot(PineappleBot):
     try:
       self.bot_name = str(self.config.bot_name)
       self.model_name = "{}-model.json".format(self.bot_name)
+      self.corpus_dir_name = "{}-corpus".format(self.bot_name)
     except:
       self.bot_name = ""
       self.model_name = "model.json"
+      self.corpus_dir_name = "corpus"
     self.scrape()
 
   # scrapes the accounts the bot is following to build corpus
@@ -61,7 +63,7 @@ class ebooksBot(PineappleBot):
       
     # generate the whole corpus after scraping so we don't do at every runtime
     combined_model = None
-    for (dirpath, _, filenames) in os.walk("corpus"):
+    for (dirpath, _, filenames) in os.walk(self.corpus_dir_name):
       for filename in filenames:
         with open(os.path.join(dirpath, filename)) as f:
           model = markovify.NewlineText(f, retain_original=False)
@@ -81,7 +83,7 @@ class ebooksBot(PineappleBot):
     except:
       return since
     bufferfile = 'buffer.txt'
-    corpusfile = 'corpus/%s.txt' % id
+    corpusfile = '{}/{}.txt'.format(self.corpus_dir_name, id)
     i = 0
     with open(bufferfile, 'w') as output:
       while toots != None and len(toots) > 0:
