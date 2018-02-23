@@ -22,6 +22,7 @@ If you want to re-scrape toots from your followed accounts, just stop the bot (w
 
 ## What settings can I change in config.cfg?
 
+* `bot_name`: If you're just running one bot, you can ignore this. If you're running more than one bot under the same ananas config, you should give each bot its own `bot_name`. This will allow each bot to maintain its own separate corpus and not cross-pollinate between bots.
 * `exclude_replies`: if this is True, when your bot is scraping the accounts it follows, it will ignore all toots that are replies to someone else. (This *does not* affect toots where the target user is *starting* a conversation - just where they're replying to someone.) **Default: True.**
 * `reply_to_mentions`: if this is True, your bot will reply with an auto-generated toot when someone mentions it. **Default: True.**
 * `visibility`: This affects the default visibility setting for your bot. **Default: unlisted.** The options are:
