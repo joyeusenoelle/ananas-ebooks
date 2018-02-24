@@ -18,13 +18,14 @@ Usage:
     3. By default, your bot will not scrape toots that are replies to other users. set `exclude_replies = False` if you want your bot to scrape replies in addition to "raw" toots.
 7. You're done! Type `ananas config.cfg` into your command line and watch your bot spring into action. It will start by scraping each account you've followed, then toot once each hour and look for replies so it can toot back.
 
-If you want to re-scrape toots from your followed accounts, just stop the bot (with Ctrl-C) and start it again; it will check for new toots every time it starts up.
+If you want to manually re-scrape toots from your followed accounts, just stop the bot (with Ctrl-C) and start it again; it will check for new toots every time it starts up. Otherwise, your bot will automatically re-scrape the accounts it follows every 24 hours.
 
 ## What settings can I change in config.cfg?
 
 * `bot_name`: If you're just running one bot, you can ignore this. If you're running more than one bot under the same ananas config, you should give each bot its own `bot_name`. This will allow each bot to maintain its own separate corpus and not cross-pollinate between bots.
-* `exclude_replies`: if this is True, when your bot is scraping the accounts it follows, it will ignore all toots that are replies to someone else. (This *does not* affect toots where the target user is *starting* a conversation - just where they're replying to someone.) **Default: True.**
-* `reply_to_mentions`: if this is True, your bot will reply with an auto-generated toot when someone mentions it. **Default: True.**
+* `exclude_replies`: If this is True, when your bot is scraping the accounts it follows, it will ignore all toots that are replies to someone else. (This *does not* affect toots where the target user is *starting* a conversation - just where they're replying to someone.) **Default: True.**
+* `reply_to_mentions`: If this is True, your bot will reply with an auto-generated toot when someone mentions it. **Default: True.**
+* `max_replies`: Limits the number of times your bot will reply to a given person within a 5-minute period. Among other things, this prevents pairs of bots from accidentally getting caught in a loop. You can set this to `-1` to have your bot ignore this feature and keep replying no matter what. **Default: 3.**
 * `visibility`: This affects the default visibility setting for your bot. **Default: unlisted.** The options are:
   * `public`: Your bot's toots will show up to everyone and will be posted on the public timelines. 
   * `unlisted`: Your bot's toots will show up to everyone but will *not* be posted on the public timelines.

@@ -6,7 +6,7 @@ import sys
 import getopt
 import re
 import markovify
-from ananas import PineappleBot, hourly, schedule, reply, html_strip_tags, daily
+from ananas import PineappleBot, hourly, schedule, reply, html_strip_tags, daily, interval
 from mastodon import Mastodon
 
 class ebooksBot(PineappleBot):
@@ -34,6 +34,11 @@ class ebooksBot(PineappleBot):
       self.bot_name = ""
       self.model_name = "model.json"
       self.corpus_dir_name = "corpus"
+    try:
+      self.max_replies = int(self.config.max_replies)
+    else:
+      self.max_replies = 3
+    self.recent_replies = {}
     self.scrape()
 
   # scrapes the accounts the bot is following to build corpus
@@ -49,7 +54,7 @@ class ebooksBot(PineappleBot):
     except:
       acctjson = {}
     
-    print(acctjson)
+    self.log(acctjson)
     for acc in following:
       id = str(acc['id'])
       try:
@@ -130,9 +135,11 @@ class ebooksBot(PineappleBot):
   @hourly(minute=30)
   def toot(self):
     msg = self.generate(500)
+    msg = msg.replace("@","@\\")
+    msg = msg[:500]
     self.mastodon.status_post(msg,
                               visibility = self.visibility)
-    print('Tooted: %s' % msg)
+    self.log('Tooted: %s' % msg)
 
   # scan all notifications for mentions and reply to them
   @reply
@@ -143,12 +150,25 @@ class ebooksBot(PineappleBot):
       tgt = user["acct"]
       irt = mention["id"]
       vis = mention["visibility"]
-      print("Received toot from {}: {}".format(tgt, msg.replace(chr(31), "\n")))
-      print("Responding with {} visibility: {}".format(vis, rsp))
-      final_rsp = "@{} {}".format(tgt, rsp)
-      final_rsp = final_rsp[:500]
-      self.mastodon.status_post(final_rsp,
-                    in_reply_to_id = irt,
-                    visibility = vis)
+      self.log("Received toot from {}: {}".format(tgt, msg.replace(chr(31), "\n")))
+      if (tgt not in self.recent_replies.keys() or 
+          self.recent_replies[tgt] < self.max_replies or
+          self.max_replies == -1):
+        self.log("Responding with {} visibility: {}".format(vis, rsp))
+        final_rsp = "@{} {}".format(tgt, rsp)
+        final_rsp = final_rsp[:500]
+        self.mastodon.status_post(final_rsp,
+                      in_reply_to_id = irt,
+                      visibility = vis)
+        if tgt in self.recent_replies.keys():
+          self.recent_replies[tgt] = self.recent_replies[tgt] + 1
+        else:
+          self.recent_replies[tgt] = 1
+      else:
+        self.log("...but I've talked to them too much recently.")
     else:
       pass
+
+    @interval(minute=5)
+    def reset_replies(self):
+      self.recent_replies = {}
