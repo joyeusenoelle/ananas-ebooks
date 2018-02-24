@@ -30,10 +30,12 @@ class ebooksBot(PineappleBot):
       self.bot_name = str(self.config.bot_name)
       self.model_name = "{}-model.json".format(self.bot_name)
       self.corpus_dir_name = "{}-corpus".format(self.bot_name)
+      self.acct_file = "{}-accts.json".format(self.bot_name)
     except:
       self.bot_name = ""
       self.model_name = "model.json"
       self.corpus_dir_name = "corpus"
+      self.acct_file = "accts.json"
     try:
       self.max_replies = int(self.config.max_replies)
     except:
@@ -46,7 +48,7 @@ class ebooksBot(PineappleBot):
   def scrape(self):
     me = self.mastodon.account_verify_credentials()
     following = self.mastodon.account_following(me['id'])
-    acctfile = 'accts.json'
+    acctfile = self.acct_file
     # acctfile contains info on last scraped toot id
     try:
       with open(acctfile, 'r') as f:
