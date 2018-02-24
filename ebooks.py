@@ -36,7 +36,7 @@ class ebooksBot(PineappleBot):
       self.corpus_dir_name = "corpus"
     try:
       self.max_replies = int(self.config.max_replies)
-    else:
+    except:
       self.max_replies = 3
     self.recent_replies = {}
     self.scrape()
@@ -54,7 +54,7 @@ class ebooksBot(PineappleBot):
     except:
       acctjson = {}
     
-    self.log(acctjson)
+    print(acctjson)
     for acc in following:
       id = str(acc['id'])
       try:
@@ -139,7 +139,7 @@ class ebooksBot(PineappleBot):
     msg = msg[:500]
     self.mastodon.status_post(msg,
                               visibility = self.visibility)
-    self.log('Tooted: %s' % msg)
+    print('Tooted: %s' % msg)
 
   # scan all notifications for mentions and reply to them
   @reply
@@ -150,11 +150,11 @@ class ebooksBot(PineappleBot):
       tgt = user["acct"]
       irt = mention["id"]
       vis = mention["visibility"]
-      self.log("Received toot from {}: {}".format(tgt, msg.replace(chr(31), "\n")))
+      print("Received toot from {}: {}".format(tgt, msg.replace(chr(31), "\n")))
       if (tgt not in self.recent_replies.keys() or 
           self.recent_replies[tgt] < self.max_replies or
           self.max_replies == -1):
-        self.log("Responding with {} visibility: {}".format(vis, rsp))
+        print("Responding with {} visibility: {}".format(vis, rsp))
         final_rsp = "@{} {}".format(tgt, rsp)
         final_rsp = final_rsp[:500]
         self.mastodon.status_post(final_rsp,
@@ -165,7 +165,7 @@ class ebooksBot(PineappleBot):
         else:
           self.recent_replies[tgt] = 1
       else:
-        self.log("...but I've talked to them too much recently.")
+        print("...but I've talked to them too much recently.")
     else:
       pass
 
