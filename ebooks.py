@@ -171,6 +171,6 @@ class ebooksBot(PineappleBot):
     else:
       pass
 
-    @interval(minute=5)
+    @interval(300)
     def reset_replies(self):
       self.recent_replies = {}
